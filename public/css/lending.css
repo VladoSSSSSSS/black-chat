@@ -1,0 +1,280 @@
+@font-face {
+	font-family: 'Cantarell';
+	src: url('/fonts/cantarell-v16/Cantarell-Regular.otf');
+}
+
+@font-face {
+	font-family: 'Cantarell-bold';
+	src: url('/fonts/cantarell-v16/Cantarell-Bold.otf');
+}
+
+body {
+	margin: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: white;
+	/*background-image: url("../images/kolyan.jpg");
+	background-size: cover;*/
+	color: black;
+	font-family: 'Cantarell';
+}
+
+#root {
+	width: 100%;
+	height: 100%;
+}
+
+#backg {
+	width: 100%;
+	height: 100%;
+}
+
+#wrapper_one, #wrapper_two {
+	position: absolute;
+	height: 10vw;
+	width: 25vw;
+	overflow: hidden;
+	border: 1px none red;
+	box-sizing: border-box;
+	top: 38%;
+}
+
+#wrapper_one {
+	left: 25vw;
+}
+
+#wrapper_two {
+	right: 25vw;
+}
+
+#word_one, #word_two {
+	font-size: 10vw;
+	box-sizing: border-box;
+	position: relative;	
+}
+
+#word_two {
+	/* left: 25vw; */
+	text-align: end;
+}
+
+#main_form {
+	position: absolute;
+	box-sizing: border-box;
+	width: 27vw;
+	height: 25vw;
+	left: 36.5vw;
+	top: calc(50% - 11vw);
+	background: #011418;
+	border-radius: 5mm;
+	border: 1.2mm solid #0aeff0;
+	box-shadow: 0 0 5px rgba(0 0 0 /.5), 0 0 25px rgba(0 0 0 /.5), 0 0 50px rgba(0 0 0 /.5), 0 0 100px #03e9f4;
+	font-size: 1.2vw;
+	color: silver;
+}
+
+#form_title {
+	position: absolute;
+	box-sizing: border-box;
+	width: 80%;
+	height: 18%;
+	border: 1px none red;
+	left: 10%;
+	top: 5%;
+	text-align: center;
+}
+
+#title_text {
+	position: relative;
+	top: 16%;
+	border: 1px none pink;
+	color: #0aeff0;
+	box-sizing: border-box;
+	font-size: 170%;
+}
+
+#form_login, #form_name, #form_password, #form_confirm {
+	position: absolute;
+	box-sizing: border-box;
+	width: 70%;
+	height: 10%;
+	left: 15%;
+	border: 1px none red;
+}
+
+#form_login {
+	top: 45%;
+}
+
+#form_name {
+	top: 50%;
+}
+
+#form_password {
+	top: 65%;
+}
+
+#form_confirm {
+	top: 70%
+}
+
+#form_login input, #form_name input, #form_password input, #form_confirm input {
+	position: relative;
+	width: 80%;
+	left: 10%;
+	height: 100%;
+	border-width: 0 0 0.5mm 0;
+	border-bottom-style: solid;
+	border-bottom-color: silver;
+	box-sizing: border-box;
+	background-color: #011418;
+	text-align: center;
+	font-size: 100%;
+	transition: width 0.25s ease-in-out, left 0.25s ease-in-out, border-bottom-color 0.25s linear;
+}
+
+#form_login input:focus, #form_name input:focus, #form_password input:focus, #form_confirm input:focus {
+	outline: none;
+	width: 100%;
+	left: 0;
+	border-bottom-color: #0aeff0;
+	transition: width 0.25s ease-in-out, left 0.25s ease-in-out, border-bottom-color 0.25s linear;
+}
+
+#form_login input::placeholder, #form_name input::placeholder, #form_password input::placeholder, #form_confirm input::placeholder {
+	color: rgba(10, 239, 240, 0.377);
+	transition: opacity 0.25s ease-in-out;
+}
+
+#form_login input:focus::placeholder, #form_name input:focus::placeholder, #form_password input:focus::placeholder, #form_confirm input:focus::placeholder {
+	opacity: 0;
+	transition: opacity 0.25s ease-in-out;
+}
+
+#request_type_selector {
+	position: absolute;
+	box-sizing: border-box;
+	width: 70%;
+	height: 10%;
+	left: 15%;
+	border: 1px none red;
+	top: 25%;
+	font-size: 100%;
+}
+
+#type_selector {
+	position: absolute;
+	box-sizing: border-box;
+	width: 50%;
+	height: 100%;
+	left: 0;
+	background-color: #085e5e;
+	border-radius: 1vw;
+}
+
+#sign_in, #new_account {
+	position: absolute;
+	box-sizing: border-box;
+	width: 50%;
+	height: 100%;
+	border: 1px none green;
+	text-align: center;
+	border-radius: 1vw;
+}
+
+.text_container {
+	position: relative;
+	border: 1px none blue;
+	top: 17%;
+}
+
+#sign_in {
+	left: 0;
+}
+
+#new_account {
+	right: 0;
+}
+
+#input_button {
+	position: absolute;
+	box-sizing: border-box;
+	left: 40%;
+	top: 85%;
+	width: 20%;
+	height: 10%;
+	border: 1px none blue;
+	border-radius: 0.5vw;
+}
+
+#input_button input {
+	position: relative;
+	border-radius: 1vw;
+	border-style: none;
+	width: 100%;
+	height: 100%;
+	background-color: #0b6e6e;
+	color: #27d6cb;
+	font-size: 80%;
+}
+
+#footer {
+	position: absolute;
+	width: 100%;
+	height: 1cm;
+	bottom: 0px;
+}
+
+#links {
+	position: relative;
+	height: 85%;
+	aspect-ratio: 1/0.4;
+	/* top: 3%; */
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#tg, #vk {
+	position: absolute;
+	height: 100%;
+	aspect-ratio: 1/1;
+}
+
+#tg {
+	left: 0px;
+}
+
+#vk {
+	right: 0px;
+}
+
+#b_c {
+	position: absolute;
+	height: 6mm;
+	font-size: 4.5mm;
+	color: #195d55;
+	right: 4mm;
+	top: 1.5mm;
+	cursor: default;
+	/* font-family: 'Cantarell-bold'; */
+}
+
+.green {
+	color: #0aeff0;
+}
+
+.red {
+	color: red;
+}
+
+.lime {
+	color: lime;
+}
+
+.nocursor {
+	cursor: none;
+}
+
+.pointer {
+	cursor: pointer;
+}

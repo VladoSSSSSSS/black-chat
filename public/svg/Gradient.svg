@@ -1,0 +1,27 @@
+<div>
+	<div style="position: absolute;">
+		<svg id="grad" height="1.5cm" width="100%" xmlns="http://www.w3.org/2000/svg">
+			<defs>
+				<linearGradient id="lgrad" x1="100%" y1="50%" x2="0%" y2="50%" gradientTransform="rotate(90)" >
+					<stop offset="0%" stop-opacity="0" />
+					<stop offset="50%" stop-opacity="1" />
+				</linearGradient>
+			</defs>
+			<!-- <text x="100" y="50" text-anchor="middle" id="myText" font-size="50" fill="red">Hello</text> -->
+			<rect width="400" height="50" fill="url(#lgrad)" />
+		</svg>
+	</div>
+
+	<div style="position: absolute; top: 50px">
+		<svg id="grad2" height="1.5cm" width="100%" xmlns="http://www.w3.org/2000/svg">
+			<defs>
+				<linearGradient id="lgrad2" x1="100%" y1="50%" x2="0%" y2="50%" >
+					<stop offset="0%" stop-opacity="0" />
+					<stop offset="50%" stop-opacity="1" />
+				</linearGradient>
+			</defs>
+			<!-- <text x="100" y="50" text-anchor="middle" id="myText" font-size="50" fill="red">Hello</text> -->
+			<rect width="400" height="50" fill="url(#lgrad2)" />
+		</svg>
+	</div>
+</div>

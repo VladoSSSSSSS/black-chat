@@ -1,0 +1,29 @@
+{
+  "name": "black-chat",
+  "version": "1.0.0",
+  "description": "Single-page chat application",
+  "main": "/react_components/desktop/private/App.jsx",
+  "scripts": {
+    "test": "echo \"Tested successful!\" && exit 1",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.2",
+    "laravel-vite-plugin": "^2.0.1"
+  },
+  "dependencies": {
+    "@react-spring/web": "^10.0.3",
+    "@use-gesture/react": "^10.3.1",
+    "ajax_x": "file:./node_modules_/ajax_x",
+    "custom-ws-client": "file:./node_modules_/custom-ws-client",
+    "getCookie": "file:./node_modules_/getCookie",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "vite": "^7.3.1"
+  }
+}
