@@ -423,6 +423,18 @@ class chat extends Controller
         return response($counter);
     }
 
+    public function get_coturn_access_token(Request $request) {
+        if (Auth::check()) {
+            //$secret = config('app.coturn_secret');
+            $timestamp = time() + 18000;
+            $username = $timestamp.':'.$request->session()->get('login');
+            $password = base64_encode(hash_hmac('sha1', $username, config('app.coturn_secret'), true));
+            return response()->json([$username, $password]);
+        } else {
+            return response('Not authenticated', 401);
+        }
+    }
+
     public function service() {
         /*
         $login = "Marinn";

@@ -142,7 +142,7 @@ body {
 	border-top-left-radius: 3mm;
 	border-top-right-radius: 3mm;
 	top: 0px;
-	z-index: 2;
+	z-index: 3;
 }
 
 #button_back {
@@ -163,17 +163,27 @@ body {
 
 #button_call {
 	position: absolute;
-	height: 100%;
-	aspect-ratio: 1/1;
+	height: 80%;
+	aspect-ratio: 0.8/1;
 	right: 0px;
 	top: 0px;
 	border: 1px none white;
 }
 
-#button_call svg {
+#button_call_audio {
+	position: absolute;
+	height: 80%;
+	aspect-ratio: 0.8/1;
+	right: 1.2cm;
+	top: 0px;
+	border: 1px none white;
+}
+
+#button_call svg, #button_call_audio svg {
 	position: relative;
-	left: 20%;
+	left: 5%;
 	top: 10%;
+	border: 0.3px none yellow;
 }
 
 .line {
@@ -186,7 +196,7 @@ body {
 #lineID {
 	position: absolute;
 	bottom: 0px;
-	z-index: 4;
+	z-index: 2;
 }
 
 .default {
@@ -1334,29 +1344,104 @@ input[name="password"] {
 
 #videoplayback {
 	position: fixed;
-	left: 0;
-	top: 0;
-	z-index: 5;
+	left: 0px;
+	top: 0px;
+	z-index: 3;
 	width: 100vw;
 	height: 100vh;
-}
-
-#end_call_UI {
-	position: absolute;
-	width: 1.2cm;
-	height: 1.2cm;
-	border-radius: 0.6cm;
-	bottom: 2cm;
-	left: calc(50% - 0.75cm);
-	z-index: 6;
 	background-color: #000;
-	opacity: 0.5;
 }
 
 #RemoteVideo {
-	position: absolute;
+	position: relative;
+	z-index: 5;
+	top: 0px;
 	width: 100%;
 	height: 100%;
+}
+
+.incomingCallBanner_3, .incomingCallBanner_2, .after_answer_3, .after_answer_2 {
+	position: fixed;
+	height: 1.4cm;
+	bottom: 1.5cm;
+	border-radius: 0.7cm;
+	background-color: #333;
+	opacity: 1;
+	z-index: 6;
+}
+
+.incomingCallBanner_3, .after_answer_3 {
+	width: 4cm;
+	left: calc(50% - 2cm);
+}
+
+.incomingCallBanner_2, .after_answer_2 {
+	width: 2.7cm;
+	left: calc(50% - 1.35cm);
+}
+
+.after_answer_3 {
+	bottom: 1mm;
+}
+
+#decline, #accept, #mic_sw, #cam_sw {
+	position: absolute;
+	width: 1.2cm;
+	aspect-ratio: 1/1;
+	border-radius: 0.6cm;
+	bottom: 1mm;
+	background-color: #000;
+	opacity: 1;
+}
+
+#decline {
+	left: 1mm;
+}
+
+#accept {
+	right: 1mm;
+}
+
+#mic_sw {
+	left: 1.4cm;
+}
+
+#cam_sw {
+	left: 2.7cm;
+}
+
+#decline svg, #accept svg, #mic_sw svg, #cam_sw svg {
+	position: relative;
+	left: 20%;
+	top: 20%;
+	border: 0.1px none yellow;
+	opacity: 1;
+}
+
+#callInfo {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: #000;
+	z-index: 3;
+}
+
+#picture_block {
+	position: absolute;
+	width: 60%;
+	aspect-ratio: 1/1;
+	top: 28%;
+	left: 23%;
+}
+
+#callInfo_text {
+	position: absolute;
+	top: 60%;
+	width: 100%;
+	font-size: 1cm;
+	text-align: center;
 }
 
 /* .message {

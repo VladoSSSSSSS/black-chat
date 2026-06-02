@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'https://black-chat.ru'),
 
     'asset_url' => env('ASSET_URL'),
 
@@ -185,4 +185,5 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'coturn_secret' => env('COTURN_SECRET', 'north'),
 ];

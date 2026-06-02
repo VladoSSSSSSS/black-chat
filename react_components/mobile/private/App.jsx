@@ -19,6 +19,13 @@ function App() {
     const [headerText, setHeaderText] = useState('Messages');
     const [go_back, setBackButton] = useState(false);
     const [callButtonState, setCallButtonState] = useState(false);
+    const [audioCallButtonState, setAudioCallButtonState] = useState(false);
+    const [incomingCallBannerState, setIncomingCallBannerState] = useState(false);
+    const [acceptButtonState, setAcceptButtonState] = useState(false);
+    const [callControlStyle, setCallControlStyle] = useState("incomingCallBanner_2");
+    const [audioCallColor, setAudioCallColor] = useState(false);
+    const [videoCallColor, setVideoCallColor] = useState(false);
+    const [callInfo, setCallInfo] = useState(false);
 
     //for Messages
     const [message, setMessage] = useState(false);
@@ -58,6 +65,7 @@ function App() {
     //other states and refs
     const [loaded, setLoaded] = useState(false);
     const userData = useRef(null);
+    const call_offer = useRef({"room": null, "video": false, "calling": false});
     const [general_view, set_general_view] = useState("loading");
     const conn = useRef(null);
     const close_sum_menu = useRef(null);
@@ -72,7 +80,9 @@ function App() {
         "MSG_TYPE_WEBRTC_READY": 7,
     };
     const peerConnection = useRef(null);
+    const mediaTracks = useRef({"front_camera": null, "main_mic": null});
     const localStream = useRef(null);
+    const coturn_cred = useRef({});
 
 
                         /* AJAX-requests */
@@ -187,7 +197,7 @@ function App() {
         await createPeerConnection();
         await peerConnection.current.setRemoteDescription(offer);
         const answer = await peerConnection.current.createAnswer();
-        conn.current.publish(r_current_room.current, {"type": msg_codes.MSG_TYPE_WEBRTC_ANSWER, "answer": {type: 'answer', sdp: answer.sdp}});
+        conn.current.publish(call_offer.current.room, {"type": msg_codes.MSG_TYPE_WEBRTC_ANSWER, "answer": {type: 'answer', sdp: answer.sdp}});
         await peerConnection.current.setLocalDescription(answer);
     }
 
@@ -207,26 +217,34 @@ function App() {
         }
     }
 
-    async function makeCall() {
-        localStream.current = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+    async function makeCall(video, room) {
+        localStream.current = await navigator.mediaDevices.getUserMedia({video: video ? {width: {ideal: 1920 }, height: {ideal: 1080}} : false, audio: true});
+        if (video) mediaTracks.current.front_camera = localStream.current.getVideoTracks()[0];
+        mediaTracks.current.main_mic = localStream.current.getAudioTracks()[0];
         //create local video playback
-        conn.current.publish(r_current_room.current, {"type": msg_codes.MSG_TYPE_WEBRTC_READY});
+        ajax_x("GET", "/coturn_cred", "", (xhr) => {
+            let responseData = JSON.parse(xhr.response);
+            coturn_cred.current.username = responseData[0];
+            coturn_cred.current.password = responseData[1];
+            conn.current.publish(room, {"type": msg_codes.MSG_TYPE_WEBRTC_READY, "video": video});
+        });
     }
 
     function createPeerConnection() {
         peerConnection.current = new RTCPeerConnection(
             {
                 iceServers: [
-                    //{urls: 'stun:stun.l.google.com:19302'},
+                    {urls: 'stun:stun.l.google.com:19302'},
                     {
                         urls: 'turn:black-chat.ru:3478',
-                        username: userData.current["login"],
-                        credential: userData.current["login"]
+                        username: coturn_cred.current.username,
+                        credential: coturn_cred.current.password
                     }
                 ],
-                iceTransportPolicy: 'relay'
+                //iceTransportPolicy: 'relay'
             }
         );
+
         peerConnection.current.onicecandidate = e => {
             const message = {
                 type: 'candidate',
@@ -237,29 +255,48 @@ function App() {
                 message.sdpMid = e.candidate.sdpMid;
                 message.sdpMLineIndex = e.candidate.sdpMLineIndex;
             }
-            conn.current.publish(r_current_room.current, {"type": msg_codes.MSG_TYPE_WEBRTC_ICE_CANDIDATE, "iceCandidate": message});
+            conn.current.publish(call_offer.current.room, {"type": msg_codes.MSG_TYPE_WEBRTC_ICE_CANDIDATE, "iceCandidate": message});
         };
+
         peerConnection.current.ontrack = e => {
             remoteVideo.current = e.streams[0];
+            if (call_offer.current.video) setCallInfo(false);
             setShowRemoteCamera(true);
         };
         peerConnection.current.addEventListener('connectionstatechange', event => {
             if (peerConnection.current.connectionState === 'connected') {
+                setAcceptButtonState(false);
+                setIncomingCallBannerState(true);
+                setCallInfo(true);
+                if (call_offer.current.video) {
+                    setCallControlStyle("after_answer_3");
+                } else {
+                    setCallControlStyle("after_answer_2");
+                }
                 console.log("Peers connected!");
             }
         });
-        localStream.current.getTracks().forEach(track => peerConnection.current.addTrack(track, localStream.current));
+        //localStream.current.getTracks().forEach(track => peerConnection.current.addTrack(track, localStream.current));
+        if (call_offer.current.video) peerConnection.current.addTrack(mediaTracks.current.front_camera, localStream.current);
+        peerConnection.current.addTrack(mediaTracks.current.main_mic, localStream.current);
     }
 
-    async function onReady() {
+    async function onReady(video, room) {      //true - video call, false - audio call
         if (!localStream.current) {
-            console.log('not ready yet');
+            call_offer.current.video = video;
+            call_offer.current.room = room;
+            call_offer.current.calling = true;
+            setAcceptButtonState(true);
+            setIncomingCallBannerState(true);
+            setCallInfo(true);
+            setCallControlStyle("incomingCallBanner_2");
+            //console.log('not ready yet');
             return;
         };
 
         await createPeerConnection();
         const offer = await peerConnection.current.createOffer();
-        conn.current.publish(r_current_room.current, {"type": msg_codes.MSG_TYPE_WEBRTC_OFFER, "offer": {type: 'offer', sdp: offer.sdp}});
+        conn.current.publish(call_offer.current.room, {"type": msg_codes.MSG_TYPE_WEBRTC_OFFER, "offer": {type: 'offer', sdp: offer.sdp}});
         await peerConnection.current.setLocalDescription(offer);
     }
 
@@ -268,15 +305,38 @@ function App() {
             peerConnection.current.close();
             peerConnection.current = null;
         }
-        localStream.current.getTracks().forEach(track => track.stop());
+        if (localStream.current != null) {
+            if(call_offer.current.video) {
+                mediaTracks.current.front_camera.stop();
+                mediaTracks.current.front_camera = null;
+                call_offer.current.video = false;
+            }
+            mediaTracks.current.main_mic.stop();
+            mediaTracks.current.main_mic = null;
+            //localStream.current.getTracks().forEach(track => track.stop());
+        }
         localStream.current = null;
         remoteVideo.current = null;
+        call_offer.current.calling = false;
         setShowRemoteCamera(false);
+        setIncomingCallBannerState(false);
+        setCallInfo(false);
+        setVideoCallColor(false);
+        setAudioCallColor(false);
     };
 
     async function endCall() {
         hangUp();
-        conn.current.publish(r_current_room.current, {"type": msg_codes.MSG_TYPE_WEBRTC_CLOSE});
+        conn.current.publish(call_offer.current.room, {"type": msg_codes.MSG_TYPE_WEBRTC_CLOSE});
+        call_offer.current.room = null;
+    }
+
+    function micControl() {
+        mediaTracks.current.main_mic.enabled = !mediaTracks.current.main_mic.enabled;
+    }
+
+    function camControl() {
+        mediaTracks.current.front_camera.enabled = !mediaTracks.current.front_camera.enabled;
     }
 
 
@@ -448,6 +508,7 @@ function App() {
             setHeaderText(rooms_data_storage.current[room]["name"]);
             setBackButton(true);
             setCallButtonState(true);
+            setAudioCallButtonState(true);
         } else {
             set_search_view_type(false);
             set_container_view_type("none");
@@ -463,6 +524,7 @@ function App() {
             setHeaderText(rooms_data_storage.current[room]["name"]);
             setBackButton(true);
             setCallButtonState(true);
+            setAudioCallButtonState(true);
         }
     }
 
@@ -478,6 +540,7 @@ function App() {
     function back_button_nandler() {
         setBackButton(false);
         setCallButtonState(false);
+        setAudioCallButtonState(false);
         set_messages_view_type(false);
         set_container_view_type("ok");
         setHeaderText("Messages");
@@ -499,15 +562,29 @@ function App() {
             <div id="mainContainer">
 
                 <MainSideTop
+                    room={r_current_room.current}
                     text={headerText}
                     button={go_back}
                     reference={mainSideTop_ref}
                     buttonHandler={back_button_nandler}
                     callButton={callButtonState}
+                    audioCallButton={audioCallButtonState}
+                    incomingCallBanner={incomingCallBannerState}
+                    call_offer={call_offer.current}
                     makeCall={makeCall}
                     showRemoteCamera={showRemoteCamera}
                     remoteVideo={remoteVideo.current}
                     endCall={endCall}
+                    micControl={micControl}
+                    camControl={camControl}
+                    acceptButton={acceptButtonState}
+                    callControlStyle={callControlStyle}
+                    audioCallColor={audioCallColor}
+                    videoCallColor={videoCallColor}
+                    setAudioCallColor={setAudioCallColor}
+                    setVideoCallColor={setVideoCallColor}
+                    callInfo={callInfo}
+                    rooms={rooms_data_storage.current}
                 />
                 
 

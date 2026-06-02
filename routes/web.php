@@ -7,13 +7,7 @@ use Illuminate\Support\Facades\File;
 Route::get('/', [chat::class, 'index'])->name('/');
 Route::get('/profile', [chat::class, 'profile']);
 //Route::get('/storage', [chat::class, 'storage']);
-Route::get('/8', function () {
-    $filePath = public_path('8march/index.html');
-        if (File::exists($filePath)) {
-            return File::get($filePath);
-        }
-    }
-);
+Route::get('/coturn_cred', [chat::class, 'get_coturn_access_token']);
 Route::get('/logout', [chat::class, 'logout']);
 Route::get('/init', [chat::class, 'initialize']);
 Route::get('/search/{nickname}', [chat::class, 'search']);

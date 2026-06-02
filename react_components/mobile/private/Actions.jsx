@@ -57,7 +57,7 @@ export default function Actions({deleteRoom, roomId, setClose}) {
     }
 
         return (
-            <animated.div className="actionsBox" style={{cursor: "pointer", ...styles}} onPointerDown={handleDown} >
+            <animated.div className="actionsBox" style={{cursor: "pointer", ...styles}} onClick={handleDown} >
                 <div className="actionsR" data-type="delete">
                     <div className="actionSVG">
                         <div className="svgbox">

@@ -76,7 +76,7 @@ export default function ChatList({api, states}) {
                 //list.push(<Actions />);
         
                 return (
-                    <div id="allChats" onPointerDown={clickHandler}>
+                    <div id="allChats" onClick={clickHandler}>
                         <List_component data={list}></List_component>
                     </div>
                 );
